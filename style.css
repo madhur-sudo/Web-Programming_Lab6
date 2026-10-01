@@ -1,0 +1,1038 @@
+/* =======================================================
+   style.css — NEXUS.DEV | Cyberpunk Developer Portfolio
+   Web Programming Lab Assignment — Madhur Thepale
+   -------------------------------------------------------
+   CSS Concepts Demonstrated:
+     ✓ External CSS stylesheet (linked via <link>)
+     ✓ CSS Custom Properties (variables)
+     ✓ background-image, background-size, background-position
+     ✓ background-attachment: fixed (parallax)
+     ✓ Dark overlay using position: absolute + z-index
+     ✓ Multiple text colors (headings vs body vs muted)
+     ✓ Font styling (Orbitron, Share Tech Mono, Inter)
+     ✓ Borders and border-radius on all cards
+     ✓ Padding and margin throughout
+     ✓ box-shadow with neon glow effects
+     ✓ text-shadow for neon text
+     ✓ Hover transitions on all interactive elements
+     ✓ Flexbox (navbar, contact, footer)
+     ✓ CSS Grid (skills section)
+     ✓ Responsive media queries
+     ✓ Pseudo-elements (::before, ::after) for details
+   ======================================================= */
+
+
+/* -------------------------------------------------------
+   1. CSS VARIABLES (Custom Properties)
+      Centralised color palette for the cyberpunk theme.
+      All colors reference these variables — easy to change.
+   ------------------------------------------------------- */
+:root {
+  /* === COLOR PALETTE === */
+  --bg-base:      #050816;   /* deep space black — page background    */
+  --bg-panel:     #080D1F;   /* dark blue panel background            */
+  --bg-card:      #070C1A;   /* slightly lighter card backgrounds     */
+  --bg-section:   #060A16;   /* alternate section background          */
+
+  --neon-cyan:    #00F5FF;   /* primary neon cyan accent              */
+  --neon-pink:    #FF008C;   /* secondary neon pink / magenta         */
+  --neon-purple:  #8A2BE2;   /* tertiary purple accent                */
+  --neon-green:   #00FF88;   /* status / success indicator green      */
+
+  --text-main:    #E8FAFF;   /* main body text — almost white         */
+  --text-muted:   #8BA3B5;   /* muted secondary text                  */
+  --text-dim:     #4A6070;   /* very dim text for labels              */
+
+  /* === TYPOGRAPHY === */
+  --font-heading: 'Orbitron', sans-serif;     /* futuristic headings  */
+  --font-mono:    'Share Tech Mono', monospace; /* terminal/code text */
+  --font-body:    'Inter', sans-serif;         /* clean body text     */
+
+  /* === SPACING === */
+  --section-pad: 100px 24px;
+
+  /* === TRANSITIONS === */
+  --t-fast:   0.2s ease;
+  --t-normal: 0.35s ease;
+}
+
+
+/* -------------------------------------------------------
+   2. CSS RESET
+      Removes default browser margin and padding.
+      box-sizing: border-box makes sizing predictable.
+   ------------------------------------------------------- */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box; /* border and padding included in width */
+}
+
+
+/* -------------------------------------------------------
+   3. BASE / BODY STYLES
+      Sets the global font, background color, text color,
+      and smooth scrolling behavior for anchor links.
+   ------------------------------------------------------- */
+body {
+  font-family: var(--font-body);
+  background-color: var(--bg-base);   /* very dark background color    */
+  color: var(--text-main);            /* light text on dark background */
+  line-height: 1.7;
+  scroll-behavior: smooth;            /* smooth anchor navigation      */
+  min-height: 100vh;
+
+  /* Subtle scanline grid pattern using CSS — decorative cyberpunk detail */
+  background-image:
+    linear-gradient(rgba(0, 245, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 245, 255, 0.02) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+
+/* -------------------------------------------------------
+   4. NAVIGATION BAR
+      Demonstrates: Flexbox, fixed positioning, padding,
+      backdrop-filter (glassmorphism), border, box-shadow.
+   ------------------------------------------------------- */
+.navbar {
+  position: fixed;              /* sticks to top while scrolling       */
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+
+  /* Flexbox: brand on left, nav links on right */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 18px 56px;           /* spacing inside the navbar           */
+
+  /* Semi-transparent dark glass background */
+  background-color: rgba(5, 8, 22, 0.88);
+  backdrop-filter: blur(16px);  /* frosted glass effect                */
+
+  /* Neon cyan bottom border */
+  border-bottom: 1px solid rgba(0, 245, 255, 0.25);
+
+  /* Subtle glow shadow below navbar */
+  box-shadow: 0 4px 30px rgba(0, 245, 255, 0.08),
+              0 1px 0 rgba(0, 245, 255, 0.15);
+}
+
+/* Brand logo: ">_ NEXUS.DEV" */
+.nav-brand {
+  font-family: var(--font-heading);  /* Orbitron font — futuristic     */
+  font-size: 1.15rem;
+  font-weight: 900;
+  color: var(--neon-cyan);           /* neon cyan brand color          */
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  text-shadow: 0 0 12px rgba(0, 245, 255, 0.5); /* neon glow on text */
+}
+
+/* Terminal prefix styling */
+.nav-prefix {
+  color: var(--neon-pink);           /* pink > _ prefix for contrast   */
+  margin-right: 6px;
+}
+
+/* Remove bullet points from nav list */
+.nav-links {
+  list-style: none;                  /* no default bullets             */
+  display: flex;                     /* horizontal row with flexbox    */
+  gap: 36px;
+}
+
+/* Individual nav link anchor tags */
+.nav-links a {
+  text-decoration: none;             /* remove default underline       */
+  font-family: var(--font-mono);     /* monospace for tech feel        */
+  font-size: 0.82rem;
+  font-weight: 400;
+  color: var(--text-muted);          /* muted text — different from brand */
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 4px 0;
+  border-bottom: 1px solid transparent;
+  transition: color var(--t-fast), border-color var(--t-fast),
+              text-shadow var(--t-fast);
+}
+
+/* Nav link hover: neon cyan glow */
+.nav-links a:hover {
+  color: var(--neon-cyan);                          /* bright cyan on hover */
+  border-bottom: 1px solid var(--neon-cyan);        /* underline appears    */
+  text-shadow: 0 0 10px rgba(0, 245, 255, 0.6);    /* neon glow on hover   */
+}
+
+
+/* -------------------------------------------------------
+   5. HERO SECTION
+      Demonstrates: background-image, background-size,
+      background-position, background-attachment (fixed),
+      dark overlay, z-index stacking, text-shadow.
+   ------------------------------------------------------- */
+.hero {
+  position: relative;           /* required for overlay child element  */
+  width: 100%;
+  min-height: 100vh;            /* full screen height                  */
+
+  /* ============================================================
+     BACKGROUND IMAGE — Key CSS Lab concept
+     bg.png is the cyberpunk city image in the same folder.
+  ============================================================ */
+  background-image: url('bg.png');
+  background-size: cover;           /* stretches to fill the section   */
+  background-position: center;      /* centers the image               */
+  background-attachment: fixed;     /* parallax: bg stays while scrolling */
+  background-repeat: no-repeat;
+
+  /* Center the hero content */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+
+  padding-top: 80px; /* offset for fixed navbar */
+}
+
+/* -------------------------------------------------------
+   DARK OVERLAY over background image
+   This is a key CSS concept: semi-transparent layer that
+   sits on top of the bg image so text is readable.
+------------------------------------------------------- */
+.hero-overlay {
+  position: absolute;       /* positioned over the full hero area    */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+
+  /* Deep dark gradient overlay — primarily dark with slight color */
+  background: linear-gradient(
+    160deg,
+    rgba(5,  8,  22, 0.82) 0%,
+    rgba(8, 13,  31, 0.78) 40%,
+    rgba(5,  8,  22, 0.88) 100%
+  );
+
+  z-index: 1; /* above background image, below content */
+}
+
+/* Hero content layer — above the overlay */
+.hero-content {
+  position: relative;
+  z-index: 2;             /* sits on top of the dark overlay         */
+  max-width: 860px;
+  padding: 60px 24px;
+}
+
+/* System Online tag above the main heading */
+.hero-status-tag {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--neon-green);
+  letter-spacing: 4px;
+  margin-bottom: 28px;
+  text-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+}
+
+/* Main hero H1 heading */
+.hero-title {
+  font-family: var(--font-heading);      /* Orbitron futuristic font  */
+  font-size: clamp(2rem, 5.5vw, 4rem);  /* fluid responsive font size */
+  font-weight: 900;
+  color: var(--text-main);              /* near-white text            */
+  letter-spacing: 3px;
+  line-height: 1.15;
+  margin-bottom: 24px;
+  text-shadow: 0 0 40px rgba(0, 245, 255, 0.25); /* faint cyan glow  */
+}
+
+/* Accented part of hero title — neon cyan */
+.hero-title-accent {
+  color: var(--neon-cyan);              /* different text color       */
+  text-shadow: 0 0 30px rgba(0, 245, 255, 0.8),  /* strong neon glow */
+               0 0 60px rgba(0, 245, 255, 0.4);
+  display: block;
+}
+
+/* Subtitle: CODE • CREATE • INNOVATE */
+.hero-subtitle {
+  font-family: var(--font-mono);
+  font-size: clamp(0.85rem, 2vw, 1.1rem);
+  color: var(--text-muted);             /* muted — different from heading */
+  letter-spacing: 5px;
+  margin-bottom: 28px;
+}
+
+/* Hero intro paragraph */
+.hero-description {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  color: var(--text-main);
+  max-width: 580px;
+  margin: 0 auto 44px auto;            /* auto side-margins = centered  */
+  opacity: 0.85;
+  line-height: 1.8;
+}
+
+/* CTA Button: [ ENTER SYSTEM ] */
+.hero-btn {
+  display: inline-block;
+  text-decoration: none;
+  font-family: var(--font-mono);
+  font-size: 0.88rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+
+  color: var(--neon-cyan);             /* cyan text                     */
+  background-color: transparent;       /* no fill — outline button      */
+
+  padding: 14px 44px;
+  border: 1px solid var(--neon-cyan);  /* neon cyan border              */
+  border-radius: 3px;
+
+  /* Neon glow shadow */
+  box-shadow: 0 0 15px rgba(0, 245, 255, 0.3),
+              inset 0 0 15px rgba(0, 245, 255, 0.05);
+
+  transition: background-color var(--t-normal),
+              box-shadow var(--t-normal),
+              color var(--t-normal);
+}
+
+/* Button hover: fills with cyan glow */
+.hero-btn:hover {
+  background-color: rgba(0, 245, 255, 0.1);
+  box-shadow: 0 0 30px rgba(0, 245, 255, 0.6),
+              inset 0 0 20px rgba(0, 245, 255, 0.1);
+  color: #ffffff;
+}
+
+/* Status panel below the button */
+.hero-status-panel {
+  margin-top: 50px;
+  display: flex;                        /* flexbox: items in a row       */
+  justify-content: center;
+  gap: 36px;
+  flex-wrap: wrap;
+}
+
+/* Individual status text item */
+.status-item {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--text-dim);
+  letter-spacing: 2px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Colored status dots */
+.status-dot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;                   /* makes it a circle             */
+}
+
+.dot-green  { background-color: var(--neon-green);
+              box-shadow: 0 0 6px var(--neon-green); }
+.dot-cyan   { background-color: var(--neon-cyan);
+              box-shadow: 0 0 6px var(--neon-cyan); }
+.dot-pink   { background-color: var(--neon-pink);
+              box-shadow: 0 0 6px var(--neon-pink); }
+
+
+/* -------------------------------------------------------
+   6. SHARED SECTION STYLES
+      Consistent padding, alignment, heading styles
+      applied to all content sections on the page.
+   ------------------------------------------------------- */
+.section {
+  padding: var(--section-pad);  /* padding top/bottom and left/right  */
+  text-align: center;           /* demonstrates text-align CSS property */
+}
+
+/* Small terminal label above section heading */
+.section-label {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--neon-pink);              /* pink — visually distinct     */
+  letter-spacing: 3px;
+  margin-bottom: 14px;
+  text-shadow: 0 0 8px rgba(255, 0, 140, 0.4);
+}
+
+/* Section main heading (h2) */
+.section-heading {
+  font-family: var(--font-heading);
+  font-size: clamp(1.5rem, 3.5vw, 2.2rem);
+  font-weight: 700;
+  color: var(--neon-cyan);             /* cyan — different from body text */
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+  text-shadow: 0 0 20px rgba(0, 245, 255, 0.4);
+}
+
+/* Muted subtext below section headings */
+.section-subtext {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--text-muted);            /* muted grey — different color  */
+  margin-bottom: 56px;
+  letter-spacing: 2px;
+}
+
+
+/* -------------------------------------------------------
+   7. TERMINAL PANEL (reusable component)
+      Glass-dark panel with cyan border and glow.
+      Used for the About and Contact sections.
+      Demonstrates: border, border-radius, padding,
+      box-shadow, background-color.
+   ------------------------------------------------------- */
+.terminal-panel {
+  background-color: rgba(8, 13, 31, 0.92);  /* dark translucent fill  */
+  border: 1px solid rgba(0, 245, 255, 0.3); /* visible neon border    */
+  border-radius: 8px;                        /* rounded corners        */
+
+  /* Neon glow box shadow — inner and outer */
+  box-shadow: 0 0 40px rgba(0, 245, 255, 0.08),
+              inset 0 0 40px rgba(0, 245, 255, 0.03),
+              0 8px 40px rgba(0, 0, 0, 0.5);
+
+  overflow: hidden;                          /* clips terminal bar     */
+}
+
+/* Top bar with traffic-light dots */
+.terminal-bar {
+  display: flex;                /* flexbox: dots + title in a row     */
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  background-color: rgba(0, 245, 255, 0.05);
+  border-bottom: 1px solid rgba(0, 245, 255, 0.12);
+}
+
+/* Traffic-light dot circles */
+.t-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;            /* circle shape via border-radius    */
+}
+
+.t-red    { background-color: #FF5F57; }
+.t-yellow { background-color: #FEBC2E; }
+.t-green  { background-color: #28C840; }
+
+/* Terminal window title text */
+.terminal-title {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  letter-spacing: 2px;
+  margin-left: 8px;
+}
+
+/* Inner content body of the terminal panel */
+.terminal-body {
+  padding: 36px 44px;           /* padding inside the panel content  */
+  text-align: left;             /* left-aligned text inside card     */
+}
+
+
+/* -------------------------------------------------------
+   8. ABOUT SECTION
+      Demonstrates: margin (auto centering), border,
+      border-radius, different text colors.
+   ------------------------------------------------------- */
+.about-section {
+  background-color: var(--bg-section);  /* slightly different from base */
+}
+
+/* Center the about card with max-width + auto margin */
+.about-card {
+  max-width: 820px;
+  margin: 0 auto;                        /* auto margin centers the card */
+}
+
+/* About sub-heading: "Hello, World!" */
+.about-subheading {
+  font-family: var(--font-heading);
+  font-size: 1.15rem;
+  color: var(--neon-cyan);              /* cyan — visually distinct       */
+  margin-bottom: 22px;
+  letter-spacing: 1px;
+}
+
+/* Body text paragraphs in about section */
+.about-text {
+  font-family: var(--font-body);
+  font-size: 0.97rem;
+  color: var(--text-main);             /* main text — different from heading */
+  margin-bottom: 18px;
+  line-height: 1.85;
+}
+
+.about-text:last-child {
+  margin-bottom: 0;
+}
+
+
+/* -------------------------------------------------------
+   9. SKILLS SECTION
+      Demonstrates: CSS Grid, border, border-radius,
+      hover effects, box-shadow, gradient backgrounds.
+   ------------------------------------------------------- */
+.skills-section {
+  background-color: var(--bg-base);
+}
+
+/* CSS Grid layout for skill cards */
+.skills-grid {
+  display: grid;                           /* CSS Grid                    */
+  grid-template-columns: repeat(3, 1fr);  /* 3 equal columns             */
+  gap: 24px;                              /* space between grid cells     */
+  max-width: 1060px;
+  margin: 0 auto;
+}
+
+/* Base skill card */
+.skill-card {
+  position: relative;
+  padding: 32px 24px;                     /* padding inside each card    */
+  border-radius: 8px;                     /* rounded corners             */
+  border: 1px solid rgba(0, 245, 255, 0.15); /* subtle neon border      */
+  background-color: var(--bg-card);
+  text-align: center;
+  cursor: default;
+
+  /* Depth shadow */
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.5),
+              inset 0 1px 0 rgba(0, 245, 255, 0.05);
+
+  /* Smooth hover transition */
+  transition: transform var(--t-normal),
+              box-shadow var(--t-normal),
+              border-color var(--t-normal);
+}
+
+/* Corner bracket decoration via pseudo-element */
+.skill-card::before {
+  content: '';
+  position: absolute;
+  top: -1px;
+  left: -1px;
+  width: 20px;
+  height: 20px;
+  border-top: 2px solid var(--neon-cyan);   /* top-left corner bracket  */
+  border-left: 2px solid var(--neon-cyan);
+  opacity: 0.6;
+  transition: opacity var(--t-normal);
+}
+
+.skill-card::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  right: -1px;
+  width: 20px;
+  height: 20px;
+  border-bottom: 2px solid var(--neon-cyan); /* bottom-right bracket    */
+  border-right: 2px solid var(--neon-cyan);
+  opacity: 0.6;
+  transition: opacity var(--t-normal);
+}
+
+/* Hover: card lifts and glows */
+.skill-card:hover {
+  transform: translateY(-8px);             /* upward lift on hover       */
+  border-color: rgba(0, 245, 255, 0.5);   /* brighter border on hover   */
+  box-shadow: 0 16px 50px rgba(0, 0, 0, 0.5),
+              0 0 30px rgba(0, 245, 255, 0.12); /* stronger glow        */
+}
+
+.skill-card:hover::before,
+.skill-card:hover::after {
+  opacity: 1;                              /* brackets brighten on hover */
+}
+
+/* Different subtle gradient per skill (different background styling) */
+.skill-c      { background: linear-gradient(145deg, #070C1A 50%, #0A1228); }
+.skill-java   { background: linear-gradient(145deg, #070C1A 50%, #140A0A); }
+.skill-python { background: linear-gradient(145deg, #070C1A 50%, #0A1410); }
+.skill-web    { background: linear-gradient(145deg, #070C1A 50%, #0A1020); }
+.skill-sql    { background: linear-gradient(145deg, #070C1A 50%, #14140A); }
+.skill-git    { background: linear-gradient(145deg, #070C1A 50%, #140A14); }
+
+/* Module number label */
+.skill-num {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--text-dim);              /* very dim — subtle label         */
+  letter-spacing: 3px;
+  margin-bottom: 14px;
+}
+
+/* Skill icon emoji */
+.skill-icon {
+  font-size: 2.6rem;
+  margin-bottom: 14px;
+  display: block;
+}
+
+/* Skill name */
+.skill-name {
+  font-family: var(--font-heading);
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--neon-cyan);            /* cyan — different text color     */
+  letter-spacing: 2px;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+}
+
+/* "SYSTEM MODULE" small label below name */
+.skill-label {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  color: var(--neon-pink);            /* pink accent — different color   */
+  letter-spacing: 3px;
+  margin-bottom: 14px;
+}
+
+/* Skill description text */
+.skill-desc {
+  font-size: 0.82rem;
+  color: var(--text-muted);           /* muted — different from heading  */
+  line-height: 1.6;
+}
+
+
+/* -------------------------------------------------------
+   10. PROJECTS SECTION
+       Demonstrates: Flexbox, colored borders per card,
+       box-shadow, padding, margin, hover effects.
+   ------------------------------------------------------- */
+.projects-section {
+  background-color: var(--bg-section);
+}
+
+/* Flexbox layout for project cards */
+.projects-grid {
+  display: flex;                       /* Flexbox layout                */
+  flex-wrap: wrap;                     /* wraps to next row on small screens */
+  justify-content: center;
+  gap: 28px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+/* Base project card */
+.project-card {
+  position: relative;
+  width: 320px;
+  padding: 32px 28px;
+  border-radius: 8px;                  /* rounded corners               */
+  background-color: var(--bg-card);
+  text-align: left;
+
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5);
+
+  transition: transform var(--t-normal),
+              box-shadow var(--t-normal);
+}
+
+/* Three differently colored top borders for each project card */
+.project-solar {
+  border-top: 3px solid #FF9F0A;       /* orange — solar themed         */
+  border-left: 1px solid rgba(255, 159, 10, 0.2);
+  border-right: 1px solid rgba(255, 159, 10, 0.15);
+  border-bottom: 1px solid rgba(255, 159, 10, 0.1);
+}
+
+.project-bus {
+  border-top: 3px solid var(--neon-cyan); /* cyan — transport themed    */
+  border-left: 1px solid rgba(0, 245, 255, 0.2);
+  border-right: 1px solid rgba(0, 245, 255, 0.15);
+  border-bottom: 1px solid rgba(0, 245, 255, 0.1);
+}
+
+.project-rps {
+  border-top: 3px solid var(--neon-pink); /* pink — game themed         */
+  border-left: 1px solid rgba(255, 0, 140, 0.2);
+  border-right: 1px solid rgba(255, 0, 140, 0.15);
+  border-bottom: 1px solid rgba(255, 0, 140, 0.1);
+}
+
+/* Hover effect: lifts card */
+.project-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+}
+
+/* Project ID label: "PROJECT_01" */
+.project-id {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  color: var(--text-dim);
+  letter-spacing: 3px;
+  margin-bottom: 10px;
+}
+
+/* Project title heading */
+.project-title {
+  font-family: var(--font-heading);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-main);            /* white — strong contrast         */
+  letter-spacing: 1.5px;
+  margin-bottom: 8px;
+}
+
+/* Category line below title */
+.project-category {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  letter-spacing: 2px;
+  margin-bottom: 14px;
+  border-left: 2px solid var(--neon-pink); /* pink left border accent  */
+  padding-left: 8px;
+}
+
+/* Project description */
+.project-desc {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  line-height: 1.7;
+  margin-bottom: 18px;
+}
+
+/* Tech badge row */
+.project-tech {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+/* Individual tech badge pill */
+.tech-badge {
+  font-family: var(--font-mono);
+  font-size: 0.67rem;
+  padding: 3px 10px;
+  border-radius: 2px;                  /* slightly rounded rectangle    */
+  border: 1px solid rgba(0, 245, 255, 0.35);
+  color: var(--neon-cyan);
+  background-color: rgba(0, 245, 255, 0.06);
+  letter-spacing: 1px;
+}
+
+/* Project status indicator: "● ACTIVE" */
+.project-status {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--neon-green);
+  letter-spacing: 2px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+
+/* -------------------------------------------------------
+   11. PHILOSOPHY SECTION
+       Minimal, visually striking with large neon text.
+       Demonstrates: text-shadow, padding, text-align,
+       font-size.
+   ------------------------------------------------------- */
+.philosophy-section {
+  background-color: var(--bg-base);
+  padding: 80px 24px;
+
+  /* Neon pink scanline accent on top */
+  border-top: 1px solid rgba(255, 0, 140, 0.2);
+  border-bottom: 1px solid rgba(255, 0, 140, 0.2);
+}
+
+/* Philosophy text wrapper */
+.philosophy-content {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* First line: KEEP IT SIMPLE. */
+.philosophy-line-1 {
+  font-family: var(--font-heading);
+  font-size: clamp(2rem, 6vw, 4.5rem);
+  font-weight: 900;
+  color: var(--text-main);
+  letter-spacing: 8px;
+  line-height: 1.1;
+  margin-bottom: 16px;
+  text-shadow: 0 0 40px rgba(255, 0, 140, 0.3); /* pink glow          */
+}
+
+/* Second line: BUILD IT WELL. */
+.philosophy-line-2 {
+  font-family: var(--font-heading);
+  font-size: clamp(2rem, 6vw, 4.5rem);
+  font-weight: 900;
+  color: var(--neon-cyan);            /* cyan — different color         */
+  letter-spacing: 8px;
+  line-height: 1.1;
+  text-shadow: 0 0 40px rgba(0, 245, 255, 0.5),  /* strong cyan glow   */
+               0 0 80px rgba(0, 245, 255, 0.25);
+}
+
+
+/* -------------------------------------------------------
+   12. CONTACT SECTION
+       Demonstrates: Flexbox inside grid, terminal panel,
+       border, padding, hover effects, text colors.
+   ------------------------------------------------------- */
+.contact-section {
+  background-color: var(--bg-section);
+}
+
+/* Terminal-style contact container */
+.contact-terminal {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+/* Flexbox grid of contact cards inside panel */
+.contact-grid {
+  display: flex;                       /* Flexbox                        */
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0;                              /* no gap — separated by borders  */
+  padding: 32px 28px;
+}
+
+/* Individual contact card */
+.contact-card {
+  flex: 1;                             /* flex sizing                    */
+  min-width: 220px;
+  padding: 28px 24px;
+  text-align: center;
+  border-right: 1px solid rgba(0, 245, 255, 0.1); /* divider border    */
+  transition: background-color var(--t-normal);
+}
+
+/* Remove right border from last card */
+.contact-card:last-child {
+  border-right: none;
+}
+
+/* Hover: subtle highlight */
+.contact-card:hover {
+  background-color: rgba(0, 245, 255, 0.03);
+}
+
+/* Terminal prompt label: > EMAIL: */
+.contact-prompt {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--neon-pink);
+  letter-spacing: 3px;
+  margin-bottom: 12px;
+}
+
+/* Contact icon emoji */
+.contact-icon {
+  font-size: 2rem;
+  margin-bottom: 12px;
+  display: block;
+}
+
+/* Contact type label (Email / GitHub / LinkedIn) */
+.contact-label {
+  font-family: var(--font-heading);
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--neon-cyan);            /* cyan — different from link text */
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+/* Clickable contact link */
+.contact-link {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--text-muted);           /* muted grey — different from label */
+  text-decoration: none;
+  word-break: break-all;
+  line-height: 1.6;
+  transition: color var(--t-fast), text-shadow var(--t-fast);
+}
+
+/* Contact link hover: turns neon cyan */
+.contact-link:hover {
+  color: var(--neon-cyan);
+  text-shadow: 0 0 10px rgba(0, 245, 255, 0.5);
+}
+
+
+/* -------------------------------------------------------
+   13. FOOTER
+       Demonstrates: border, padding, text alignment,
+       Flexbox, different text colors.
+   ------------------------------------------------------- */
+.footer {
+  background-color: #020510;          /* darkest color on the page      */
+  border-top: 1px solid var(--neon-cyan); /* neon cyan top border       */
+  padding: 28px 24px;
+
+  /* Neon glow from the top border */
+  box-shadow: 0 -4px 30px rgba(0, 245, 255, 0.06);
+}
+
+/* Inner flexbox row */
+.footer-inner {
+  display: flex;                       /* Flexbox                        */
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+/* Footer brand text */
+.footer-brand {
+  font-family: var(--font-heading);
+  font-size: 0.8rem;
+  color: var(--neon-cyan);            /* cyan brand text                 */
+  letter-spacing: 3px;
+}
+
+/* Copyright text */
+.footer-copy {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--text-dim);             /* dim grey — different color      */
+  letter-spacing: 2px;
+}
+
+/* System status indicator */
+.footer-status {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--neon-green);
+  letter-spacing: 2px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+
+/* -------------------------------------------------------
+   14. RESPONSIVE MEDIA QUERIES
+       Demonstrates: responsive design with @media rules.
+       Adapts layout for tablet and mobile screens.
+   ------------------------------------------------------- */
+
+/* --- Tablet (768px and below) --- */
+@media (max-width: 768px) {
+
+  /* Stack navbar brand and links vertically */
+  .navbar {
+    flex-direction: column;
+    gap: 14px;
+    padding: 16px 20px;
+  }
+
+  .nav-links {
+    gap: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  /* Switch skills grid to 2 columns on tablet */
+  .skills-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* Stack project cards */
+  .project-card {
+    width: 90%;
+    max-width: 420px;
+  }
+
+  /* Terminal panel body padding reduction */
+  .terminal-body {
+    padding: 28px 24px;
+  }
+
+  /* Philosophy text smaller on mobile */
+  .philosophy-line-1,
+  .philosophy-line-2 {
+    letter-spacing: 4px;
+  }
+
+  /* Stack footer items */
+  .footer-inner {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  /* Stack contact cards vertically */
+  .contact-card {
+    border-right: none;
+    border-bottom: 1px solid rgba(0, 245, 255, 0.1);
+    width: 100%;
+  }
+
+  .contact-card:last-child {
+    border-bottom: none;
+  }
+}
+
+/* --- Mobile (480px and below) --- */
+@media (max-width: 480px) {
+
+  /* Single column for skills on small phones */
+  .skills-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Adjust section spacing */
+  .section {
+    padding: 70px 16px;
+  }
+
+  /* Smaller hero heading */
+  .hero-title {
+    font-size: 1.9rem;
+    letter-spacing: 1px;
+  }
+
+  .hero-subtitle {
+    font-size: 0.78rem;
+    letter-spacing: 3px;
+  }
+
+  /* Smaller brand text */
+  .nav-brand {
+    font-size: 0.95rem;
+    letter-spacing: 2px;
+  }
+
+  /* Hero status items stack */
+  .hero-status-panel {
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+}
